@@ -184,25 +184,25 @@ export function ColSideDiv(props: {
 ## 3. 补充
 ### api解释
 1. `ReactEditor.toSlateNode(editor, domNode)`：将 DOM 节点转换为 Slate 编辑器节点。  
-   传入 `editor` 和 `domNode`，返回对应的 Slate 节点。
+   传入 `editor` 和 `domNode`，返回对应的 Slate 节点。 [ReactEditor](https://docs.slatejs.org/libraries/slate-react/react-editor)
 
 2. `ReactEditor.toDOMNode(editor, slateNode)`：将 Slate 编辑器节点转换为 DOM 元素。  
-   传入 `editor` 和 `slateNode`，返回对应的 DOM 元素。
+   传入 `editor` 和 `slateNode`，返回对应的 DOM 元素。 [ReactEditor](https://docs.slatejs.org/libraries/slate-react/react-editor)
 
 3. `ReactEditor.findPath(editor, node)`：返回指定 Slate 节点的路径。  
-   传入 `editor` 和 `node`，返回该节点的路径。
+   传入 `editor` 和 `node`，返回该节点的路径。 [ReactEditor](https://docs.slatejs.org/libraries/slate-react/react-editor)
 
 4. `Editor.node(editor, path)`：获取指定路径的 Slate 节点。  
-   传入 `editor` 和 `path`，返回该路径下的节点。
+   传入 `editor` 和 `path`，返回该路径下的节点。 [Editor](https://docs.slatejs.org/api/nodes/editor)
 
 5. `Array.from(arrayLike)`：将类数组对象转换为数组。  
-   传入类数组对象，返回一个新的数组。
+   传入类数组对象，返回一个新的数组。   [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
 
 6. `e.stopPropagation()`：阻止事件冒泡。  
-   传入事件对象，阻止该事件冒泡。
+   传入事件对象，阻止该事件冒泡。    [stopPropagation](https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation)
 
 7. `e.preventDefault()`：阻止事件的默认行为。  
-   传入事件对象，阻止该事件的默认行为。
+   传入事件对象，阻止该事件的默认行为。  [preventDefault](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
 
 ### DOM 与 Slate 节点的区别
 | 特性       | DOM 节点                    | Slate 节点                     |
