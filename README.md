@@ -195,7 +195,44 @@ export function ColSideDiv(props: {
 
 ---
 
-## 3. 补充
+### 动态样式切换机制
+
+目标：在选中状态下去除 table 原有的部分圆角样式。
+
+#### 1. 核心代码
+
+```javascript
+className={`ant-md-editor-table ant-md-editor-content-table ${
+  isShowBar ? 'show-bar' : ''
+}`}
+```
+
+通过 `isShowBar` 的状态控制，动态生成 `className`。状态变化时，React 更新 `DOM` 节点的 `className` 属性。
+
+#### 2. CSS 动态匹配
+
+浏览器会检测到 `className` 的变化，并重新匹配 CSS 规则。
+
+```css
+.ant-md-editor-content-table.show-bar .md-editor-table th:first-child {
+  border-top-left-radius: 0;
+}
+.ant-md-editor-content-table.show-bar .md-editor-table th:last-child {
+  border-top-right-radius: 0;
+}
+```
+
+如果 `show-bar` 存在，则应用 `.ant-md-editor-content-table.show-bar` 的样式；如果 `show-bar` 不存在，则 `.ant-md-editor-content-table` 的默认样式生效。
+
+#### 3. 样式优先级
+
+CSS 选择器的优先级规则保证了不同状态下的样式切换：
+
+- `.ant-md-editor-content-table.show-bar` 的样式优先级高于 `.ant-md-editor-content-table` 的默认样式。
+
+---
+
+## 补充
 
 ### api 解释
 
@@ -253,3 +290,87 @@ const domNode = ReactEditor.toDOMNode(editor, slateNode);
 | **常见用途**       | - 获取元素相对于视口的位置，用于定位。                     | - 获取滚动容器的高度或元素内容的可视高度。                          |
 |                    | - 处理拖拽、动画等需要精确位置的场景。                     | - 判断元素是否溢出容器等布局场景。                                  |
 | **性能消耗**       | 较高，触发浏览器的重绘和回流（Reflow）。                   | 较低，通常不会触发回流。                                            |
+
+---
+
+### cubic-bezier()
+
+贝塞尔曲线通过 4 个点控制动画的速度变化：
+
+- **(0, 0)** 是固定起点。
+- **(1, 1)** 是固定终点。
+- **(x1, y1)** 和 **(x2, y2)** 是控制点，定义曲线的形状。
+
+以 cubic-bezier(0.23, 1, 0.32, 1) 为例：
+
+- **x1=0.23, y1=1**: 定义动画开始时的加速效果。这意味着动画起步较慢但迅速加速。
+- **x2=0.32, y2=1**: 定义动画结束时的减速效果。这表示动画在接近结束时缓缓减速直至停止。
+
+这种曲线非常类似于 `ease-out` 效果，但它提供了更高的灵活性，允许开发者根据具体需求调整动画的速度变化模式。
+[cubic-bezier](https://lea.verou.me/blog/2011/09/a-better-tool-for-cubic-bezier-easing/)
+
+### 如何提升 CSS 选择器优先级
+
+#### 1. **增加选择器的权重**
+
+- 添加更多特定类型的选择器，例如 ID 或类。
+- 示例：
+
+  ```css
+  /* 原选择器 */
+  .button {
+    color: red;
+  }
+
+  /* 提高优先级 */
+  #main .button {
+    color: blue;
+  }
+  ```
+
+#### 2. **利用 `!important`**
+
+- `!important` 强制规则具有最高优先级，但应谨慎使用，避免破坏样式的可维护性。
+- 示例：
+  ```css
+  .button {
+    color: red !important;
+  }
+  ```
+
+#### 3. **内联样式**
+
+- 使用 HTML 的 `style` 属性设置样式，其优先级高于样式表中的任何规则（不含 `!important`）。
+- 示例：
+  ```html
+  <div style="color: red;">Inline Style</div>
+  ```
+
+#### 4. **重复同一选择器**
+
+- 重复书写选择器会提升优先级，但会影响代码清晰度，实际开发中不推荐。
+- 示例：
+  ```css
+  .button.button {
+    color: red;
+  }
+  ```
+
+#### 5. **使用更具体的选择器**
+
+- 将选择器从广泛的类别限制到特定的结构。
+- 示例：
+
+  ```css
+  /* 优先级较低 */
+  .button {
+    color: red;
+  }
+
+  /* 优先级较高 */
+  nav .menu .button {
+    color: blue;
+  }
+  ```
+
+  [CSS 优先级](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Specificity)
